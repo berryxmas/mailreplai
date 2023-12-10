@@ -37,7 +37,7 @@ export async function generateReply() {
       const prompt = `Please reply to this email.\n${emailBody}\n`;
 
       // Call the FastAPI application
-      fetch('https://localhost:8000/generate-reply', {
+      fetch('https://mailreplai.vercel.app/generate-reply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
