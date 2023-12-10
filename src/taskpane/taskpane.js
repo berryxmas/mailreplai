@@ -37,7 +37,7 @@ export async function generateReply() {
       const prompt = `Please reply to this email.\n${emailBody}\n`;
 
       // Call the FastAPI application
-      fetch('http://localhost:8000/generate-reply', {
+      fetch('https://localhost:8000/generate-reply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -48,6 +48,10 @@ export async function generateReply() {
       .then(data => {
         // Use the generated reply
         console.log(data);
+      })
+      .catch(error => {
+        // Log any errors that occur during the fetch request
+        console.error('Error:', error);
       });
     }
   });
