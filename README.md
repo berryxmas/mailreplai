@@ -8,10 +8,10 @@ Mailreplai is an Add-in for Outlook where you can use AI to reply on your emails
 
 ## How to Run
 1. Clone the repository to your local machine.
-2. Navigate to the api directory and install the Python dependencies by running pip install -r requirements.txt.
-3. Start the FastAPI server by running uvicorn main:app --reload in the api directory.
-4. Navigate to the root directory and install the JavaScript dependencies by running npm install.
-5. Start the JavaScript application by running npm start. Or npm run dev-server.
+2. Navigate to the api directory and install the Python dependencies by running `pip install -r requirements.txt`.
+3. Start the FastAPI server by running `uvicorn main:app --reload` in the api directory.
+4. Navigate to the root directory and install the JavaScript dependencies by running `npm install`.
+5. Start the JavaScript application by running `npm start`. Or `npm run dev-server`.
 
 Please ensure you have Python, pip, Node.js, and npm installed on your machine before running the application.
 
