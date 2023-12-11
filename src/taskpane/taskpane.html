@@ -8,7 +8,7 @@
     <meta charset="UTF-8" />
     <!-- <meta http-equiv="X-UA-Compatible" content="IE=Edge" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Contoso Task Pane Add-in</title>
+    <title>MailReplai Add-in</title>
 
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
@@ -24,27 +24,29 @@
 </head>
 
 <body class="ms-font-m ms-welcome ms-Fabric">
-    <header class="ms-welcome__header ms-bgColor-neutralLighter">
-        <img width="90" height="90" src="../../assets/logo-filled.png" alt="Contoso" title="Contoso" />
-        <h1 class="ms-font-su">Welcome</h1>
-    </header>
+    <div id="top-bar">
+        <span id="app-name">MailReplai</span>
+        <img id="account-icon" src="../../assets/user.png" alt="Account Icon">
+    </div>
     <section id="sideload-msg" class="ms-welcome__main">
         <h2 class="ms-font-xl">Please <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a> your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
-        <h2 class="ms-font-xl"> Discover what Office Add-ins can do for you today! </h2>
-        <h4 class="ms-font-xl"> We can make your life easier with "Answer with AI" </h4>
-        <p><label id="item-subject"></label></p>
-        <div role="button" id="run" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
-            <span class="ms-Button-label">Run</span>
+        <div class="info-container">
+            <p id="item-subject"><span class="label">Answer to:</span> </p>
+            <p id="email-sender"><span class="label">From:</span> </p>
         </div>
-        <h4 class="ms-font-xl"> Try it, maybe you're lucky </h4>
+        <!-- Button for Reply with AI -->
         <div role="button" id="generate-reply" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl generate-reply-button">
             <span class="ms-Button-label">Generate Reply</span>
         </div>
-        <p><label id="item-content"></label></p>
         <p><label id="status-message"></label></p>
-        <p><label id="gpt3-reply"></label></p>
+        <!-- Button for Use Reply -->
+        <div role="button" id="use-reply" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl generate-reply-button" style="display: none;">
+            <span class="ms-Button-label">Use Reply</span>
+        </div>
+        <!-- Show gpt-reply -->
+        <p><label id="gpt-reply"></label></p>
         
     </main>
     <!-- <main id="app-body" class="ms-welcome__main" style="display: none;">
