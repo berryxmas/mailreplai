@@ -65,15 +65,15 @@
      margin-top: 30px;
  }
  
-.ms-Button.ms-Button--hero .ms-Button-label {
-  color: #0078d7;
+/* .ms-Button.ms-Button--hero .ms-Button-label {
+  color: #b61f86;
 }
 
 .ms-Button.ms-Button--hero:hover .ms-Button-label,
 .ms-Button.ms-Button--hero:focus .ms-Button-label{
-  color: #005a9e;
+  color: #5c009e;
   cursor: pointer;
-}
+} */
 
 b {
     font-weight: bold;
@@ -110,33 +110,53 @@ b {
     color: rgb(22, 63, 75);
     font-weight: bold;
 }
-#generate-reply {
-    background-color: #111827;
-    border: 1px solid transparent;
-    border-radius: 0.75rem;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    cursor: pointer;
-    flex: 0 0 auto;
-    font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    font-size: 1.125rem;
-    font-weight: 600;
-    line-height: 1.5rem;
-    padding: 0.75rem 1.2rem;
-    text-align: center;
-    text-decoration: none #6B7280 solid;
-    text-decoration-thickness: auto;
-    transition-duration: .2s;
-    transition-property: background-color,border-color,color,fill,stroke;
-    transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    width: auto;
+/* Styling for Generate and Use Reply buttons */
+#generate-reply, #use-reply {
+    background-color: #3b82f6; /* bg-blue-500 */
+    color: #FFFFFF; /* text-white */
+    font-size: 1.0rem; /* Adjust font size */
+    font-weight: bold; /* font-bold */
+    padding: 0.5rem 1rem; /* py-2 px-4 */
+    border-radius: 0.25rem; /* rounded */
+    margin-left: 1rem; /* Add space to the right */
 }
 
-#generate-reply:hover {
-    background-color: #555; /* Background color when hovered */
-    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2); /* Shadow when hovered */
-    transform: translateY(-7px); /* Move up when hovered */
+#generate-reply:hover, #use-reply:hover {
+    background-color: #1e3a8a; /* bg-blue-700 when hovered */
+}
+
+/* Styling for Adjust Reply button */
+#adjust-reply {
+    background-color: #FFFFFF; /* White background */
+    color: #000000; /* Black text */
+    border: 2px solid #000000; /* Thicker black border */
+    font-size: 0.8rem; /* Smaller font size */
+    font-weight: bold; /* font-bold */
+    padding: 0.5rem 1rem; /* py-2 px-4 */
+    border-radius: 0.25rem; /* rounded */
+}
+
+#adjust-reply:hover {
+    background-color: #F8F8F8; /* Light gray background when hovered */
+}
+/* Styling for the input field and submit button container */
+#adjust-input-container {
+    display: none;
+    width: 100%; /* Set the width to the width of the buttons */
+    margin-top: 1rem; /* Add space above the input field */
+}
+
+/* Styling for the input field */
+#adjust-input {
+    width: 90%; /* Set the width to fill most of the container */
+    border: none; /* Remove the border */
+    padding: 0.5rem; /* Add some padding */
+}
+
+/* Styling for the submit button */
+#submit-adjustment {
+    width: 10%; /* Set the width to fill the rest of the container */
+    border: none; /* Remove the border */
+    background: none; /* Remove the background */
+    cursor: pointer; /* Change the cursor to a pointer when hovering over the button */
 }

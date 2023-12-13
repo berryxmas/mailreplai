@@ -4,14 +4,33 @@ Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
-    document.getElementById('generate-reply').onclick = generateReply;
-  //   document.getElementById('use-reply').addEventListener('click', function() {
-  //     var replyContent = document.getElementById('gpt-reply').innerHTML;
-  //     Office.context.mailbox.item.displayReplyForm({ 'htmlBody': replyContent });
-  // });
+
+    var generateReplyButton = document.getElementById('generate-reply');
+    if (generateReplyButton) {
+        generateReplyButton.onclick = generateReply;
+    }
+
+    var generateReplyTestButton = document.getElementById('generate-reply-test');
+    if (generateReplyTestButton) {
+        generateReplyTestButton.onclick = generateStandardEmail;
+    }
+
     document.getElementById('use-reply').addEventListener('click', function() {
       var replyContent = document.getElementById('gpt-reply').innerHTML;
       Office.context.mailbox.item.displayReplyAllForm({ 'htmlBody': replyContent });
+    });
+
+    document.getElementById('adjust-reply').addEventListener('click', function() {
+      // Display the input field and the submit button when the "Adjust Reply" button is clicked
+      document.getElementById('adjust-input-container').style.display = 'flex';
+    });
+
+    document.getElementById('submit-adjustment').addEventListener('click', function() {
+      // Get the adjustment from the input field
+      var adjustment = document.getElementById('adjust-input').value;
+
+      // Call the generateReply function with the adjustment
+      generateReply(adjustment);
     });
 
     // Get a reference to the current message
@@ -27,7 +46,24 @@ Office.onReady((info) => {
   }
 });
 
-export async function generateReply() {
+// For testing purposes we use a standard email
+export async function generateStandardEmail() {
+  // Define the standard email
+  var standardEmail = "Dear Customer,\n\nThank you for your email. We will get back to you as soon as possible.\n\nBest regards,\nCustomer Service";
+
+  // Display status message
+  document.getElementById('status-message').textContent = 'Generating for you...';
+
+  // Display the standard email in the appropriate element
+  document.getElementById('gpt-reply').innerHTML = standardEmail;
+
+  document.getElementById('status-message').textContent = 'Reply generated!';
+
+  // Show the "Use Reply" and "Adjust Reply" buttons
+  document.getElementById('button-container').style.display = 'flex';
+}
+
+export async function generateReply(adjustment) {
   console.log('Generate Reply button pressed. Reply is on its way...');
 
   // Read content from the current message
@@ -39,7 +75,15 @@ export async function generateReply() {
       document.getElementById('status-message').textContent = 'Generating for you...';
 
       // Define prompt for GPT-3
-      const prompt = `Please reply to this email.\n${emailBody}\n`;
+      const prompt = `Please reply to this email. Use the language from the emailbody: \n${emailBody}\n`;
+
+      // Define the request body
+      let requestBody = {content: prompt};
+
+      // If an adjustment is provided, include it in the request body
+      if (adjustment) {
+        requestBody.adjustment = adjustment;
+      }
 
       // Call the FastAPI application
       fetch('https://mailreplai.vercel.app/generate-reply', {
@@ -47,7 +91,7 @@ export async function generateReply() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({content: prompt})
+        body: JSON.stringify(requestBody)
       })
       .then(response => response.json())
       .then(data => {
@@ -56,7 +100,7 @@ export async function generateReply() {
         document.getElementById('gpt-reply').innerHTML = data.replace(/\n/g, '<br>');
         document.getElementById('status-message').textContent = 'Reply generated!';
         // Show the "Use Reply" button
-        document.getElementById('use-reply').style.display = 'block';
+        document.getElementById('button-container').style.display = 'flex';
       })
       .catch(error => {
         // Log any errors that occur during the fetch request

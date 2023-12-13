@@ -41,9 +41,21 @@
             <span class="ms-Button-label">Generate Reply</span>
         </div>
         <p><label id="status-message"></label></p>
-        <!-- Button for Use Reply -->
-        <div role="button" id="use-reply" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl generate-reply-button" style="display: none;">
-            <span class="ms-Button-label">Use Reply</span>
+        <!-- Container for Use Reply and Adjust Reply buttons -->
+        <div id="button-container" style="display: flex; justify-content: space-between; display: none;">
+            <!-- Button for Adjust Reply -->
+            <div role="button" id="adjust-reply" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl generate-reply-button">
+                <span class="ms-Button-label">Adjust Reply</span>
+            </div>
+            <!-- Button for Use Reply -->
+            <div role="button" id="use-reply" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl generate-reply-button">
+                <span class="ms-Button-label">Use Reply</span>
+            </div>
+        </div>
+        <!-- Container for Adjust Reply input and submit button -->
+        <div id="adjust-input-container" style="display: none;">
+            <input type="text" id="adjust-input" placeholder="Type your adjustment here...">
+            <button id="submit-adjustment">➤</button>
         </div>
         <!-- Show gpt-reply -->
         <p><label id="gpt-reply"></label></p>
