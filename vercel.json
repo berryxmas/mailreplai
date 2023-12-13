@@ -16,9 +16,5 @@
       "env": {
         "NODE_ENV": "production"
       }
-    },
-    "scripts": {
-      "dev": "npm run dev-server",
-      "build": "npm run build"
-    }
   }
+}
