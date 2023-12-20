@@ -12,9 +12,14 @@ client = OpenAI(api_key=openai_api_key)
 
 app = FastAPI()
 
+origins = [
+    "https://mailreplaijs-berryxmas-projects.vercel.app",
+    "http://localhost:3000", 
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=origins,  # Allows all origins
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
