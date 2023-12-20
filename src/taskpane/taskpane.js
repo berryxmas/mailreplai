@@ -1,4 +1,5 @@
 /* global document, Office */
+import { franc } from 'franc-min';
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
@@ -7,7 +8,7 @@ Office.onReady((info) => {
 
     var generateReplyButton = document.getElementById('generate-reply');
     if (generateReplyButton) {
-        generateReplyButton.onclick = generateReply;
+      generateReplyButton.onclick = function() { generateReply(); }; // Call without event object
     }
 
     var generateReplyTestButton = document.getElementById('generate-reply-test');
@@ -25,12 +26,15 @@ Office.onReady((info) => {
       document.getElementById('adjust-input-container').style.display = 'flex';
     });
 
+    // Event handler for 'submit-adjustment' button
     document.getElementById('submit-adjustment').addEventListener('click', function() {
-      // Get the adjustment from the input field
-      var adjustment = document.getElementById('adjust-input').value;
+      // Correctly extract the adjustment string from the input field
+      var adjustment = document.getElementById('adjust-input').value.trim();
 
-      // Call the generateReply function with the adjustment
-      generateReply(adjustment);
+      // Check if adjustment is not empty, then call generateReply with adjustment
+      if (adjustment) {
+        generateReply(adjustment);
+      }
     });
 
     // Get a reference to the current message
@@ -45,6 +49,10 @@ Office.onReady((info) => {
     senderElement.innerHTML += item.from.emailAddress;
   }
 });
+
+// Global variable to store the last generated reply
+let lastGeneratedReply = '';
+
 
 // For testing purposes we use a standard email
 export async function generateStandardEmail() {
@@ -66,46 +74,72 @@ export async function generateStandardEmail() {
 export async function generateReply(adjustment) {
   console.log('Generate Reply button pressed. Reply is on its way...');
 
-  // Read content from the current message
   Office.context.mailbox.item.body.getAsync("text", { asyncContext: "This is passed to the callback" }, async function(result) {
     if (result.status === Office.AsyncResultStatus.Succeeded) {
       const emailBody = result.value; // This is the email content
-
-      // Display status message
-      document.getElementById('status-message').textContent = 'Generating for you...';
-
-      // Define prompt for GPT-3
-      const prompt = `Please reply to this email. Use the language from the emailbody: \n${emailBody}\n`;
-
-      // Define the request body
-      let requestBody = {content: prompt};
-
-      // If an adjustment is provided, include it in the request body
-      if (adjustment) {
-        requestBody.adjustment = adjustment;
+      // Only pass the adjustment if it's a string
+      if (typeof adjustment === 'string' && adjustment.trim() !== '') {
+        generateEmailReply(emailBody, adjustment);
+      } else {
+        generateEmailReply(emailBody);
       }
-
-      // Call the FastAPI application
-      fetch('https://mailreplai.vercel.app/generate-reply', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Use the generated reply
-        console.log(data);
-        document.getElementById('gpt-reply').innerHTML = data.replace(/\n/g, '<br>');
-        document.getElementById('status-message').textContent = 'Reply generated!';
-        // Show the "Use Reply" button
-        document.getElementById('button-container').style.display = 'flex';
-      })
-      .catch(error => {
-        // Log any errors that occur during the fetch request
-        console.error('Error:', error);
-      });
     }
   });
 }
+
+async function generateEmailReply(emailBody, adjustment) {
+  // Display status message
+  document.getElementById('status-message').textContent = 'Generating for you...';
+
+  // Detect the language of the email
+  const language = franc(emailBody);
+
+  if (adjustment) {
+    // If an adjustment is made, change the prompt accordingly
+    prompt = `Make this adjustment: ${adjustment}. To the following email: ${lastGeneratedReply}. Remember the original email: ${emailBody}. And be sure to answer in ${language}.`;
+  } else {
+    // If no adjustment is provided, use the original prompt
+    prompt = `Please reply to this email in ${language}. The email is as follows: \n${emailBody}\n`;
+  }
+
+  // Define the request body
+  let requestBody = { content: prompt, language: language };
+
+  // Call the FastAPI application
+  fetch('https://mailreplai.vercel.app/generate-reply', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestBody)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Use the generated reply
+    console.log(data);
+    document.getElementById('gpt-reply').innerHTML = data.replace(/\n/g, '<br>');
+    // Send status message
+    document.getElementById('status-message').textContent = 'Reply generated!';
+    // Save data as lastgeneratedreply
+    lastGeneratedReply = data;
+    // Show the "Use Reply" button
+    document.getElementById('button-container').style.display = 'flex';
+  })
+  .catch(error => {
+    // Log any errors that occur during the fetch request
+    console.error('Error:', error);
+  });
+}
+
+document.getElementById('submit-adjustment').addEventListener('click', function() {
+  // Get the adjustment from the input field
+  var adjustment = document.getElementById('adjust-input').value;
+
+  // Call the function to generate the reply with the email body and the adjustment
+  Office.context.mailbox.item.body.getAsync("text", { asyncContext: "This is passed to the callback" }, async function(result) {
+    if (result.status === Office.AsyncResultStatus.Succeeded) {
+      const emailBody = result.value; // This is the email content
+      generateEmailReply(emailBody, adjustment);
+    }
+  });
+});
