@@ -14,6 +14,7 @@ app = FastAPI()
 
 origins = [
     "https://mailreplaijs-berryxmas-projects.vercel.app",
+    "https://mailreplai-js.azurewebsites.net"
     "http://localhost:3000", 
 ]
 
