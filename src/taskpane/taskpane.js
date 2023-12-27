@@ -86,7 +86,7 @@ export async function generateReply(adjustment) {
       }
 
       // Call the FastAPI application
-      fetch('https://mailreplai.vercel.app/generate-reply', {
+      fetch('https://mailreplai-api-container.orangesand-d38ef50e.westeurope.azurecontainerapps.io/generate-reply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
