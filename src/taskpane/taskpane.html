@@ -32,6 +32,9 @@
         <h2 class="ms-font-xl">Please <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a> your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
+        <!-- Feedback link -->
+        <a id="feedback-link" href="https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAO__YedW2VUMTdWWlhHUkU1RUw0TUlPSkRJTVZHUVVMWi4u" target="_blank">Give Feedback</a>
+
         <div class="info-container">
             <p id="item-subject"><span class="label">Answer to:</span> </p>
             <p id="email-sender"><span class="label">From:</span> </p>
@@ -40,7 +43,10 @@
         <div role="button" id="generate-reply" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl generate-reply-button">
             <span class="ms-Button-label">Generate Reply</span>
         </div>
+        <!-- Status message -->
         <p><label id="status-message"></label></p>
+        <!-- Loading icon -->
+        <img id="loadingIcon" src="../../assets/loading.gif" style="display: none;" alt="Loading...">
         <!-- Container for Use Reply and Adjust Reply buttons -->
         <div id="button-container" style="display: flex; justify-content: space-between; display: none;">
             <!-- Button for Adjust Reply -->

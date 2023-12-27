@@ -74,6 +74,9 @@ export async function generateReply(adjustment) {
       // Display status message
       document.getElementById('status-message').textContent = 'Generating for you...';
 
+      // Show loading icon
+      document.getElementById('loadingIcon').style.display = 'block';
+
       // Define prompt for GPT-3
       const prompt = `Please reply to this email. Use the language from the emailbody: \n${emailBody}\n`;
 
@@ -85,27 +88,47 @@ export async function generateReply(adjustment) {
         requestBody.adjustment = adjustment;
       }
 
-      // Call the FastAPI application
-      fetch('https://mailreplai-api-container.orangesand-d38ef50e.westeurope.azurecontainerapps.io/generate-reply', {
+      // Create a promise for the fetch request
+      const fetchPromise = fetch('https://mailreplai-api-container.orangesand-d38ef50e.westeurope.azurecontainerapps.io/generate-reply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestBody)
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Use the generated reply
-        console.log(data);
-        document.getElementById('gpt-reply').innerHTML = data.replace(/\n/g, '<br>');
-        document.getElementById('status-message').textContent = 'Reply generated!';
-        // Show the "Use Reply" button
-        document.getElementById('button-container').style.display = 'flex';
-      })
-      .catch(error => {
-        // Log any errors that occur during the fetch request
-        console.error('Error:', error);
       });
+
+      // Create a timeout promise
+      const timeoutPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject('The AI is too busy, try later. In the meantime please consider providing us feedback');
+        }, 30000); // 30 seconds
+      });
+
+      // Race the fetch promise against the timeout promise
+      Promise.race([fetchPromise, timeoutPromise])
+        .then(async response => {
+          if (response instanceof Response) {
+            const data = await response.json();
+            // Use the generated reply
+            console.log(data);
+            document.getElementById('gpt-reply').innerHTML = data.replace(/\n/g, '<br>');
+            // Display success status message
+            document.getElementById('status-message').textContent = 'Reply generated!';
+            // Show the "Use Reply" button
+            document.getElementById('button-container').style.display = 'flex';
+          } else {
+            throw new Error('Fetch took too long');
+          }
+        })
+        .catch(error => {
+          // Handle fetch errors or timeout
+          console.error('Error:', error);
+          document.getElementById('status-message').textContent = error;
+        })
+        .finally(() => {
+          // Hide loading icon
+          document.getElementById('loadingIcon').style.display = 'none';
+        });
     }
   });
 }

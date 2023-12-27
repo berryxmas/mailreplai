@@ -160,3 +160,10 @@ b {
     background: none; /* Remove the background */
     cursor: pointer; /* Change the cursor to a pointer when hovering over the button */
 }
+/* 
+#loadingIcon {
+    display: none;
+    width: 20px; 
+    height: 20px;
+} */
+
