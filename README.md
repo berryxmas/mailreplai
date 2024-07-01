@@ -1,6 +1,8 @@
 # mailreplai
 Mailreplai is an Add-in for Outlook where you can use AI to reply on your emails.
 
+![Mailreplai Screenshot](assets/mailreplai-screenshot.png "Mailreplai Screenshot")
+
 ## Benefits
 - Efficiency: No need to spend time crafting responses to common email queries. MailReply does it for you.
 - 24/7 Availability: MailReply works round the clock, ensuring timely responses.
